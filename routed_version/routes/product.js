@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const {getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
+
+const {productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
 
 
 /**
@@ -8,6 +9,7 @@ const {getProducts, getCategoryProducts, addProducts, getCategories, addCategori
  */
 router.get('/products', async (req, res) => {
     const category = req.query.category;
+    console.log('Kategoria: ', category)
     try {
        res.status(200).json(await getProducts(category));
     } catch (err) {
@@ -15,13 +17,38 @@ router.get('/products', async (req, res) => {
     }
 });
 
+/**
+ * Endpoint for getting a product by ID or name
+ */
+router.get('/products/:param', productFinder, async (req, res) => {
+    try {
+        const product = req.product
+        res.status(200).send(product)
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+/**
+ * Endpoint for changing the product price
+ */
+router.post('/products/:id', async (req, res) => {
+    const price = req.body.price
+    const id = req.params.id
+    try {
+            await updatePrice(id, price)
+            const product = await getByID(id)
+            res.status(200).json({updated: product})
+    } catch (error) {
+        res.json({error: error.message})
+    }
+})
 
 /**
  * Endpoint for adding new products 
  */
 router.post('/products', async (req, res) => {
     try {
-        const products = req.body;
+        const { products } = req.body;
         await addProducts(products);
         res.status(200).send("Products added!");
     } catch (err) {
@@ -45,7 +72,7 @@ router.get('/categories', async (req, res) => {
  */
 router.post('/categories', async (req, res) => {
     try {
-        const categories = req.body;
+        const {categories} = req.body;
         await addCategories(categories);
         res.status(200).send("Categories added!");
     } catch (err) {

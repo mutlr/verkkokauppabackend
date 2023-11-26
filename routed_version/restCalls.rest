@@ -1,0 +1,83 @@
+### Update product price
+POST http://localhost:3001/products/1
+Content-Type: application/json
+
+{
+    "price": 1500
+}
+
+### Get product by name
+GET http://localhost:3001/products/gipson%20les%20paul
+
+### Get product by ID
+GET http://localhost:3001/products/1
+
+### Get products with category param
+GET http://localhost:3001/products?category=music
+### Add products
+POST http://localhost:3001/products
+Content-Type: application/json
+
+{
+    "products": [
+        {
+            "productName": "Adidas shoes",
+            "price": 110,
+            "category": "Sports",
+            "imageUrl": null
+        },
+        {
+            "productName": "Macbook Air 13",
+            "price": "1300",
+            "category": "Computers",
+            "imageUrl": null
+        }
+    ]
+}
+
+### Add categories
+POST http://localhost:3001/categories
+Content-Type: application/json
+
+{
+    "categories": [
+        {
+            "categoryName": "Games",
+            "description": "Console games"
+        },
+        {
+            "categoryName": "Toys",
+            "description": "Toys for gaming"
+        }
+    ]
+}
+
+### Register
+POST http://localhost:3001/register
+Content-Type: application/json
+
+{
+    "fname": "Firstname",
+    "lname": "Lastname",
+    "username": "Username",
+    "pw": "password"
+}
+
+### Login
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+    "username": "Username",
+    "pw": "password"
+}
+
+### Customer data
+POST http://localhost:3001/customer
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
+{
+    "username": "Username",
+    "pw": "password"
+}
+#token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U

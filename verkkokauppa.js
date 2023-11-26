@@ -11,7 +11,6 @@ const multer = require('multer');
 const upload = multer({ dest: "uploads/" });
 
 var express = require('express');
-
 var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -283,3 +282,21 @@ async function getOrders(username){
         res.status(500).json({ error: err.message });
     }
 }
+
+
+app.get('/products/:id', async (req, res) => {
+    try {
+            const connection = await mysql.createConnection(conf)
+            const name = req.params.id
+            console.log('Name in request: ', name)
+            const product = await connection.execute('SELECT id, product_name productName, price, image_url imageUrl, category FROM product WHERE id = ?', [name])
+            if (product) {
+                return res.status(200).json({product: product[0]})
+            }
+            console.log('Product: ', product)
+            res.send('No product found')
+    } catch (error) {
+        res.send('Error: ', error)
+    }
+
+})

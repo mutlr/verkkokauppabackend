@@ -14,14 +14,10 @@ const {auth, createToken} = require('../auth/auth');
  * Supports urlencoded and multipart.
  */
 router.post('/register', upload.none(), async (req,res) => {
-    const fname = req.body.fname;
-    const lname = req.body.lname;
-    const uname = req.body.username;
-    const pw = req.body.pw;
-
+    const {fname, lname, username, pw} = req.body
     try {
         const pw_hash = await bcrypt.hash(pw,10);
-        await register([fname,lname,uname, pw_hash]);
+        await register([fname,lname, username, pw_hash]);
         const token = createToken(uname);
         res.status(200).json({jwtToken: token});
     } catch (error) {
