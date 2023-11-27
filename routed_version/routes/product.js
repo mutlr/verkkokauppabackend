@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
+const {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
 
 
 /**
@@ -9,7 +9,6 @@ const {productFinder, updatePrice, getByID, getProducts, getCategoryProducts, ad
  */
 router.get('/products', async (req, res) => {
     const category = req.query.category;
-    console.log('Kategoria: ', category)
     try {
        res.status(200).json(await getProducts(category));
     } catch (err) {
@@ -55,6 +54,19 @@ router.post('/products', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+/***
+ * Endpoint for deleting products
+ */
+router.delete('/products', async (req, res) => {
+    const { products } = req.body
+    try {
+        await deleteProducts(products)
+        res.status(200).send(`Products ${products} deleted`)
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
 
 /**
  * Endpoint for getting all the categories

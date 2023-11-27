@@ -1,16 +1,6 @@
 const dbPool = require('./mysql2connection');
 
-const productFinder = async (req, res, next) => {
-    console.log('ID on false: ', req.params.param)
-    const product = !isNaN(req.params.param) ? 
-    await dbPool.execute(sql.GET_PRODUCT_BY_ID, [req.params.param]) : 
-    await dbPool.execute(sql.GET_PRODUCT_BY_NAME, [req.params.param])
-    if (product[0].length === 0) {
-        return res.status(404).json({error: 'Product was not found by ID or name'})
-    }
-    req.product = product[0]
-    next()
-}
+
 //SQL commands
 const sql = {
     GET_PRODUCTS: 'SELECT id, product_name productName, price, image_url imageUrl, category FROM product',
@@ -21,8 +11,43 @@ const sql = {
     GET_PRODUCT_BY_ID: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE id = ?',
     UPDATE_PRODUCT_PRICE: 'UPDATE product SET price = ? WHERE id = ?',
     GET_PRODUCT_BY_NAME: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE product_name = ?',
+    DELETE_PRODUCTS: 'DELETE FROM product WHERE id = ?'
+}
+/***
+ * Middleware to find product by ID or name
+ */
+const productFinder = async (req, res, next) => {
+    const product = !isNaN(req.params.param) ? 
+    await dbPool.execute(sql.GET_PRODUCT_BY_ID, [req.params.param]) : 
+    await dbPool.execute(sql.GET_PRODUCT_BY_NAME, [req.params.param])
+    if (product[0].length === 0) {
+        return res.status(404).json({error: 'Product was not found by ID or name'})
+    }
+    req.product = product[0]
+    next()
 }
 
+/***
+ * Delete products
+ */
+async function deleteProducts(products) {
+    const connection = await dbPool.getConnection();
+    try {
+        await connection.beginTransaction();
+        for (const p of products) {
+            console.log(p);
+            await connection.execute(sql.DELETE_PRODUCTS, [p]);
+        }
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    }
+}
+
+/***
+ * Update product price by ID
+ */
 async function updatePrice(id, newPrice) {
     try {
         if (isNaN(newPrice)) {
@@ -67,7 +92,6 @@ async function addProducts(products){
     const connection = await dbPool.getConnection();
     try{
         await connection.beginTransaction();
-        console.log('Productit2222: ', products)
         for (const p of products) {
             console.log(p);
             await connection.execute(sql.INSERT_PRODUCTS, [p.productName, p.price, p.imageUrl, p.category]);
@@ -76,7 +100,6 @@ async function addProducts(products){
         await connection.commit();
 
     }catch(error){
-        console.log('Menee errorii')
         await connection.rollback();
         throw error;
     }
@@ -118,4 +141,4 @@ async function getByID(id) {
     const result = await dbPool.execute(sql.GET_PRODUCT_BY_ID, [id])
     return result[0]
 }
-module.exports = {productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};
+module.exports = {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};
