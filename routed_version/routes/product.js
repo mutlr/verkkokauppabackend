@@ -23,7 +23,7 @@ router.get('/products', async (req, res) => {
 router.get('/products/:param', productFinder, async (req, res) => {
     try {
         const product = req.product
-        res.status(200).send(product)
+        res.status(200).json({product})
     } catch (error) {
         res.status(500).json({error: error.message})
     }
