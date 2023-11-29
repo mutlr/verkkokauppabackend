@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
+const {getCategoryCounts, deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
 
 
 /**
@@ -32,7 +32,6 @@ router.get('/products/:param', productFinder, async (req, res) => {
  */
 router.post('/products/:param', productFinder, async (req, res) => {
     const price = req.body.price
-    const id = req.params.param
     try {
         const product = req.product
         await updatePrice(product, price)
@@ -80,6 +79,17 @@ router.get('/categories', async (req, res) => {
     }
 });
 
+/***
+ * Endpoint for getting item count per category
+ */
+router.get('/categories/count', async (req, res) => {
+    try {
+        const r = await getCategoryCounts()
+        res.status(200).json({categories: r})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
 /**
  * Endpoint for adding new product categories
  */

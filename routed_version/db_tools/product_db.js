@@ -11,10 +11,11 @@ const sql = {
     GET_PRODUCT_BY_ID: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE id = ?',
     UPDATE_PRODUCT_PRICE: 'UPDATE product SET price = ? WHERE id = ?',
     GET_PRODUCT_BY_NAME: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE product_name = ?',
-    DELETE_PRODUCTS: 'DELETE FROM product WHERE id = ?'
+    DELETE_PRODUCTS: 'DELETE FROM product WHERE id = ?',
+    COUNT_CATEGORY_ITEMS: 'SELECT category, COUNT(category) as items FROM product GROUP BY category ORDER BY items'
 }
 /***
- * Middleware to find product by ID or name
+ * Middleware to find product by ID or name, returns an error if not found
  */
 const productFinder = async (req, res, next) => {
     /// Check if given param is number or name and use appropriate SQL code
@@ -22,7 +23,7 @@ const productFinder = async (req, res, next) => {
     await dbPool.execute(sql.GET_PRODUCT_BY_ID, [req.params.param]) : 
     await dbPool.execute(sql.GET_PRODUCT_BY_NAME, [req.params.param])
     if (product[0].length === 0) {
-        return res.status(404).json({error: 'Product was not found by ID or name'})
+        return res.status(404).json({error: 'Product was not found by ID or name...'})
     }
     req.product = product[0][0]
     next()
@@ -51,13 +52,9 @@ async function deleteProducts(products) {
 async function updatePrice(product, newPrice) {
     try {
         if (isNaN(newPrice)) {
-            throw new Error('Price must be a number')
+            throw new Error('New price must be a number')
         }
-        const result = await dbPool.execute(sql.UPDATE_PRODUCT_PRICE, [newPrice, product.id])
-        if (result[0].affectedRows === 0) {
-            throw new Error('ID did not match any product')
-        }
-        return result
+        await dbPool.execute(sql.UPDATE_PRODUCT_PRICE, [newPrice, product.id])
     } catch (error) {
         throw error
     }
@@ -84,6 +81,13 @@ async function getCategoryProducts(category){
     return rows;
 }
 
+/***
+ * Get item count per category
+ */
+async function getCategoryCounts() {
+    const result = await dbPool.execute(sql.COUNT_CATEGORY_ITEMS)
+    return result[0]
+}
 /**
  * Adds new products by using transaction
  */
@@ -141,4 +145,4 @@ async function getByID(id) {
     const result = await dbPool.execute(sql.GET_PRODUCT_BY_ID, [id])
     return result[0]
 }
-module.exports = {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};
+module.exports = {getCategoryCounts, deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};
