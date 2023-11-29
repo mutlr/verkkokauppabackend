@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {getCategoryCounts, deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
+const {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
 
 
 /**
