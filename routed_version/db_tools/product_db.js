@@ -6,13 +6,12 @@ const sql = {
     GET_PRODUCTS: 'SELECT id, product_name productName, price, image_url imageUrl, category FROM product',
     GET_PRODUCTS_CATEGORY: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE category=?',
     INSERT_PRODUCTS: 'INSERT INTO product (product_name, price, image_url,category) VALUES (?,?,?,?)',
-    GET_CATEGORIES: 'SELECT category_name categoryName, category_description description FROM product_category',
+    GET_CATEGORIES: 'SELECT category_name, category_description, COUNT(category) items_in_category FROM product_category LEFT JOIN product ON product_category.category_name = product.category GROUP BY category_name ORDER BY COUNT(category)',
     INSERT_CATEGORIES: 'INSERT INTO product_category VALUES (?,?)',
     GET_PRODUCT_BY_ID: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE id = ?',
     UPDATE_PRODUCT_PRICE: 'UPDATE product SET price = ? WHERE id = ?',
     GET_PRODUCT_BY_NAME: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE product_name = ?',
     DELETE_PRODUCTS: 'DELETE FROM product WHERE id = ?',
-    COUNT_CATEGORY_ITEMS: 'SELECT category, COUNT(category) as items FROM product GROUP BY category ORDER BY items'
 }
 /***
  * Middleware to find product by ID or name, returns an error if not found
@@ -81,13 +80,6 @@ async function getCategoryProducts(category){
     return rows;
 }
 
-/***
- * Get item count per category
- */
-async function getCategoryCounts() {
-    const result = await dbPool.execute(sql.COUNT_CATEGORY_ITEMS)
-    return result[0]
-}
 /**
  * Adds new products by using transaction
  */
@@ -145,4 +137,4 @@ async function getByID(id) {
     const result = await dbPool.execute(sql.GET_PRODUCT_BY_ID, [id])
     return result[0]
 }
-module.exports = {getCategoryCounts, deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};
+module.exports = { deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};

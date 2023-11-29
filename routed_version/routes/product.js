@@ -79,17 +79,6 @@ router.get('/categories', async (req, res) => {
     }
 });
 
-/***
- * Endpoint for getting item count per category
- */
-router.get('/categories/count', async (req, res) => {
-    try {
-        const r = await getCategoryCounts()
-        res.status(200).json({categories: r})
-    } catch (error) {
-        res.status(500).json({error: error.message})
-    }
-})
 /**
  * Endpoint for adding new product categories
  */
