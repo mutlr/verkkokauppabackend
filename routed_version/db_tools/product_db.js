@@ -17,25 +17,25 @@ const sql = {
  * Middleware to find product by ID or name
  */
 const productFinder = async (req, res, next) => {
+    /// Check if given param is number or name and use appropriate SQL code
     const product = !isNaN(req.params.param) ? 
     await dbPool.execute(sql.GET_PRODUCT_BY_ID, [req.params.param]) : 
     await dbPool.execute(sql.GET_PRODUCT_BY_NAME, [req.params.param])
     if (product[0].length === 0) {
         return res.status(404).json({error: 'Product was not found by ID or name'})
     }
-    req.product = product[0]
+    req.product = product[0][0]
     next()
 }
 
 /***
- * Delete products
+ * Delete a product or multiple at the same time
  */
 async function deleteProducts(products) {
     const connection = await dbPool.getConnection();
     try {
         await connection.beginTransaction();
         for (const p of products) {
-            console.log(p);
             await connection.execute(sql.DELETE_PRODUCTS, [p]);
         }
         await connection.commit();
@@ -48,12 +48,12 @@ async function deleteProducts(products) {
 /***
  * Update product price by ID
  */
-async function updatePrice(id, newPrice) {
+async function updatePrice(product, newPrice) {
     try {
         if (isNaN(newPrice)) {
             throw new Error('Price must be a number')
         }
-        const result = await dbPool.execute(sql.UPDATE_PRODUCT_PRICE, [newPrice, id])
+        const result = await dbPool.execute(sql.UPDATE_PRODUCT_PRICE, [newPrice, product.id])
         if (result[0].affectedRows === 0) {
             throw new Error('ID did not match any product')
         }

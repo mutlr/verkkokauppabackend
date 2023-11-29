@@ -19,7 +19,7 @@ async function customerExists(customerId){
 /**
  * Adds a new order for the customer
  */
-async function addOrder(order){
+async function addOrder(order) {
 
     let connection;
     try{

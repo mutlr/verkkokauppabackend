@@ -73,11 +73,45 @@ Content-Type: application/json
 }
 
 ### Customer data
-POST http://localhost:3001/customer
+GET http://localhost:3001/customer
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
+
 {
     "username": "Username",
     "pw": "password"
 }
-#token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
+
+### Make an order
+POST http://localhost:3001/order
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "products": [
+        {
+            "id": 1,
+            "quantity": 2
+        },
+        {
+            "id": 3,
+            "quantity": 4
+        }
+    ]
+}
+
+### Order data
+GET http://localhost:3001/orders
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
+
+
+### Delete products
+DELETE http://localhost:3001/products
+Content-Type: application/json
+
+{
+    "products": [
+        12, 9
+    ]
+}
+###token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U

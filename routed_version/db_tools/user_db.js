@@ -19,7 +19,6 @@ async function register(userData){
  */
 async function getPw(username){
      const [rows] = await dbPool.execute(sql.LOGIN, [username]);
-
      if(rows.length>0){
         return rows[0].pw;
      }else{

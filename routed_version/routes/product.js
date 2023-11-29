@@ -30,13 +30,14 @@ router.get('/products/:param', productFinder, async (req, res) => {
 /**
  * Endpoint for changing the product price
  */
-router.post('/products/:id', async (req, res) => {
+router.post('/products/:param', productFinder, async (req, res) => {
     const price = req.body.price
-    const id = req.params.id
+    const id = req.params.param
     try {
-            await updatePrice(id, price)
-            const product = await getByID(id)
-            res.status(200).json({updated: product})
+        const product = req.product
+        await updatePrice(product, price)
+        const updatedProduct = await getByID(product.id)
+        res.status(200).json({updated: updatedProduct})
     } catch (error) {
         res.json({error: error.message})
     }
