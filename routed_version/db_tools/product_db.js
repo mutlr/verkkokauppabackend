@@ -22,7 +22,7 @@ const productFinder = async (req, res, next) => {
     await dbPool.execute(sql.GET_PRODUCT_BY_ID, [req.params.param]) : 
     await dbPool.execute(sql.GET_PRODUCT_BY_NAME, [req.params.param])
     if (product[0].length === 0) {
-        return res.status(404).json({error: 'Product was not found by ID or name...'})
+        return res.status(404).json({error: 'Product was not found by ID or name'})
     }
     req.product = product[0][0]
     next()
@@ -51,7 +51,7 @@ async function deleteProducts(products) {
 async function updatePrice(product, newPrice) {
     try {
         if (isNaN(newPrice)) {
-            throw new Error('New price must be a number')
+            throw new Error('Price must be a number')
         }
         await dbPool.execute(sql.UPDATE_PRODUCT_PRICE, [newPrice, product.id])
     } catch (error) {
@@ -89,7 +89,7 @@ async function addProducts(products){
     try{
         await connection.beginTransaction();
         for (const p of products) {
-            console.log(p);
+            console.log(p, '!!!!!!!!!');
             await connection.execute(sql.INSERT_PRODUCTS, [p.productName, p.price, p.imageUrl, p.category]);
         }
 
