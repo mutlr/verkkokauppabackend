@@ -59,7 +59,7 @@ Content-Type: application/json
 {
     "fname": "Firstname",
     "lname": "Lastname",
-    "username": "Username",
+    "username": "eeeee",
     "pw": "password"
 }
 
@@ -68,19 +68,14 @@ POST http://localhost:3001/login
 Content-Type: application/json
 
 {
-    "username": "Username",
+    "username": "eeeee",
     "pw": "password"
 }
 
 ### Customer data
 GET http://localhost:3001/customer
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
-
-{
-    "username": "Username",
-    "pw": "password"
-}
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZWVlIiwiaWF0IjoxNzAyNDE5OTk3fQ.vWH61R-gu-zSHQkQ0NCTLbcq6TqEEmfd2DieAjoMrcI
 
 ### Make an order
 POST http://localhost:3001/order

@@ -16,4 +16,3 @@ const conf = {
 const pool = mysql.createPool(conf);
     
 module.exports = pool;
-

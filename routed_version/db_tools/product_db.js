@@ -1,6 +1,5 @@
 const dbPool = require('./mysql2connection');
 
-
 //SQL commands
 const sql = {
     GET_PRODUCTS: 'SELECT id, product_name productName, price, image_url imageUrl, category FROM product',
@@ -13,6 +12,7 @@ const sql = {
     GET_PRODUCT_BY_NAME: 'SELECT id, product_name productName, price, image_url imageUrl, category  FROM product WHERE product_name = ?',
     DELETE_PRODUCTS: 'DELETE FROM product WHERE id = ?',
 }
+
 /***
  * Middleware to find product by ID or name, returns an error if not found
  */
@@ -89,7 +89,7 @@ async function addProducts(products){
     try{
         await connection.beginTransaction();
         for (const p of products) {
-            console.log(p, '!!!!!!!!!');
+            console.log(p);
             await connection.execute(sql.INSERT_PRODUCTS, [p.productName, p.price, p.imageUrl, p.category]);
         }
 
@@ -137,4 +137,5 @@ async function getByID(id) {
     const result = await dbPool.execute(sql.GET_PRODUCT_BY_ID, [id])
     return result[0]
 }
+
 module.exports = { deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts, getCategories, addCategories};

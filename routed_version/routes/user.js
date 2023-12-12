@@ -18,7 +18,7 @@ router.post('/register', upload.none(), async (req,res) => {
     try {
         const pw_hash = await bcrypt.hash(pw,10);
         await register([fname,lname, username, pw_hash]);
-        const token = createToken(uname);
+        const token = createToken(username);
         res.status(200).json({jwtToken: token});
     } catch (error) {
         console.log(error);
