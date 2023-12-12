@@ -11,9 +11,11 @@ const sql = {
  * Registers new user
  */
 async function register(userData) {
-   // Tarkistaa käyttäjäimen ja salasanan pituuden
+   // Check username length
    if (userData[2].length < 4) {
       throw new Error('Username is too short')
+   } else if (userData[3].length < 6) {
+      throw new Error('Password is too short')
    }
     return await dbPool.execute(sql.REGISTER, userData);
 }

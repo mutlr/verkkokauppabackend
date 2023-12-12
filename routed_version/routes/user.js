@@ -16,6 +16,7 @@ const {auth, createToken} = require('../auth/auth');
 router.post('/register', upload.none(), async (req,res) => {
     const {fname, lname, username, pw} = req.body
     try {
+        if (pw.length < 6) return res.status(400).json({error: 'Password is too short'})
         const pw_hash = await bcrypt.hash(pw,10);
         await register([fname,lname, username, pw_hash]);
         const token = createToken(username);
