@@ -115,10 +115,11 @@ async function getCategories(){
 async function addCategories(categories){
     let connection;
     try{
-        const connection = await dbPool.getConnection();
+        connection = await dbPool.getConnection();
         await connection.beginTransaction();
 
         for (const c of categories) {
+            console.log('C: ', c)
             await connection.execute(sql.INSERT_CATEGORIES, [c.categoryName, c.description]);
         }
 
