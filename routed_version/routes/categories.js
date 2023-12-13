@@ -19,7 +19,6 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const {categories} = req.body;
-        console.log('Categories: ', categories)
         await addCategories(categories);
         res.status(200).send("Categories added!");
     } catch (err) {

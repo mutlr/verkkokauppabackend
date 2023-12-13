@@ -119,7 +119,6 @@ async function addCategories(categories){
         await connection.beginTransaction();
 
         for (const c of categories) {
-            console.log('C: ', c)
             await connection.execute(sql.INSERT_CATEGORIES, [c.categoryName, c.description]);
         }
 
@@ -132,7 +131,7 @@ async function addCategories(categories){
 }
 
 /**
- * Get a product by name
+ * Get product by id
  */
 async function getByID(id) {
     const result = await dbPool.execute(sql.GET_PRODUCT_BY_ID, [id])

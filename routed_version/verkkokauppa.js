@@ -15,9 +15,9 @@ app.use(cors());
 app.use(express.static('public'));
 
 //Add routes
-app.use('/products', productRoute );
 app.use('/', userRoute );
 app.use('/', orderRoute );
+app.use('/products', productRoute );
 app.use('/categories', categoriesRoute)
 
 //Start the server
