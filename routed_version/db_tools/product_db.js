@@ -89,7 +89,7 @@ async function addProducts(products){
     try{
         await connection.beginTransaction();
         for (const p of products) {
-            console.log(p);
+            // Insert products to database
             await connection.execute(sql.INSERT_PRODUCTS, [p.productName, p.price, p.imageUrl, p.category]);
         }
 
@@ -113,18 +113,22 @@ async function getCategories(){
  * Adds new categories
  */
 async function addCategories(categories){
-    let connection;
+    // Start the connection
+    const connection = await dbPool.getConnection();;
     try{
-        connection = await dbPool.getConnection();
+        // Starts the transaction when inserting multiple items
         await connection.beginTransaction();
 
         for (const c of categories) {
+            // Go through the list and
+            // Insert categories to database
             await connection.execute(sql.INSERT_CATEGORIES, [c.categoryName, c.description]);
         }
-
+        // Commits multiple items to database
         await connection.commit();
 
     }catch(error){
+        // In case of an error undo previous executions
         await connection.rollback();
         throw error;
     }

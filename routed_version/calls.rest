@@ -59,8 +59,8 @@ Content-Type: application/json
 {
     "fname": "Firstname",
     "lname": "Lastname",
-    "username": "eeeee",
-    "pw": "password"
+    "username": "eeeeee23",
+    "pw": "pasregerd"
 }
 
 ### Login
@@ -68,14 +68,14 @@ POST http://localhost:3001/login
 Content-Type: application/json
 
 {
-    "username": "eeeee",
+    "username": "Username",
     "pw": "password"
 }
 
 ### Customer data
 GET http://localhost:3001/customer
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZWVlIiwiaWF0IjoxNzAyNDE5OTk3fQ.vWH61R-gu-zSHQkQ0NCTLbcq6TqEEmfd2DieAjoMrcI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAyNDIwMDc5fQ.o0NsVUGHD6vy5VhJHvDI3Fr6DWugRCmFU7YU7rGxZ3E
 
 ### Make an order
 POST http://localhost:3001/order
@@ -106,7 +106,13 @@ Content-Type: application/json
 
 {
     "products": [
-        12, 9
+        12, 11
     ]
 }
+
+### Get all categories
+GET http://localhost:3001/categories
+
+### Get all products
+GET http://localhost:3001/products
 ###token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXJuYW1lIiwiaWF0IjoxNzAxMDI4MjczfQ._Q4rHgyk3iekRhy2VUcl3I01sQWkytpI6cvSR0nyV2U
