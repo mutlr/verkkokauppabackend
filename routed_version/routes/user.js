@@ -14,15 +14,13 @@ const {auth, createToken} = require('../auth/auth');
  * Supports urlencoded and multipart.
  */
 router.post('/register', upload.none(), async (req,res) => {
-    const fname = req.body.fname;
-    const lname = req.body.lname;
-    const uname = req.body.username;
-    const pw = req.body.pw;
-
+    const {fname, lname, username, pw} = req.body
     try {
+        //Check password length
+        if (pw.length < 6) return res.status(400).json({error: 'Password is too short'})
         const pw_hash = await bcrypt.hash(pw,10);
-        await register([fname,lname,uname, pw_hash]);
-        const token = createToken(uname);
+        await register([fname,lname, username, pw_hash]);
+        const token = createToken(username);
         res.status(200).json({jwtToken: token});
     } catch (error) {
         console.log(error);

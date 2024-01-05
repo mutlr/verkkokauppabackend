@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node verkkokauppa.js",
+    "start": "nodemon verkkokauppa.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -22,5 +22,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.2.4",
     "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

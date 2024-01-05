@@ -10,7 +10,13 @@ const sql = {
 /**
  * Registers new user
  */
-async function register(userData){
+async function register(userData) {
+   // Check username length
+   if (userData[2].length < 4) {
+      throw new Error('Username is too short')
+   } else if (userData[3].length < 6) {
+      throw new Error('Password is too short')
+   }
     return await dbPool.execute(sql.REGISTER, userData);
 }
 
@@ -19,7 +25,6 @@ async function register(userData){
  */
 async function getPw(username){
      const [rows] = await dbPool.execute(sql.LOGIN, [username]);
-
      if(rows.length>0){
         return rows[0].pw;
      }else{

@@ -6,12 +6,13 @@ const {auth} = require('../auth/auth');
 /**
  * Endpoint for placing an order 
  */
+
 router.post('/order', async (req, res) => {
 
     try {
         const order = req.body;
 
-        if(await !customerExists(order.customerId)){
+        if(!customerExists(order.customerId)){
             res.status(404).json({ error: 'Customer not found. Incorrect customer id.' });
         }
         const id = await addOrder(order);

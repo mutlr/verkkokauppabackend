@@ -1,12 +1,13 @@
 const router = require('express').Router();
-const {getProducts, getCategoryProducts, addProducts, getCategories, addCategories} = require('../db_tools/product_db');
+
+const {deleteProducts, productFinder, updatePrice, getByID, getProducts, getCategoryProducts, addProducts} = require('../db_tools/product_db');
 
 
 /**
  * Endpoint for getting the products. 
  * Optional category query parameter for filtering only products from that category
  */
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
     const category = req.query.category;
     try {
        res.status(200).json(await getProducts(category));
@@ -15,13 +16,38 @@ router.get('/products', async (req, res) => {
     }
 });
 
+/**
+ * Endpoint for getting a product by ID or name
+ */
+router.get('/:param', productFinder, async (req, res) => {
+    try {
+        const product = req.product
+        res.status(200).json({product})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
+/**
+ * Endpoint for changing the product price
+ */
+router.post('/:param', productFinder, async (req, res) => {
+    const price = req.body.price
+    try {
+        const product = req.product
+        await updatePrice(product, price)
+        const updatedProduct = await getByID(product.id)
+        res.status(200).json({updated: updatedProduct})
+    } catch (error) {
+        res.json({error: error.message})
+    }
+})
 
 /**
  * Endpoint for adding new products 
  */
-router.post('/products', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const products = req.body;
+        const { products } = req.body;
         await addProducts(products);
         res.status(200).send("Products added!");
     } catch (err) {
@@ -29,15 +55,18 @@ router.post('/products', async (req, res) => {
     }
 });
 
-/**
- * Endpoint for getting all the categories
+/***
+ * Endpoint for deleting products
  */
-router.get('/categories', async (req, res) => {
+router.delete('/', async (req, res) => {
+    const { products } = req.body
     try {
-        res.json(await getCategories());
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        await deleteProducts(products)
+        res.status(200).send(`Products ${products} deleted`)
+    } catch (error) {
+        res.status(500).json({error: error.message})
     }
+<<<<<<< HEAD
 });
 
 /**
@@ -54,5 +83,8 @@ router.post('/categories', async (req, res) => {
 });
 
 router.get('/product')
+=======
+})
+>>>>>>> d9a4de4ef7d9124f32086b04a211bb4c1856b300
 
 module.exports = router;
