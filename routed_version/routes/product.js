@@ -53,5 +53,6 @@ router.post('/categories', async (req, res) => {
     }
 });
 
+router.get('/product')
 
 module.exports = router;
